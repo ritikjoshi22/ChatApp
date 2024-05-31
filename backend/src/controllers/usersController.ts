@@ -67,14 +67,20 @@ export const setAvatar = async (
     const userId = req.params.id;
     const avatarImage = req.body.image;
     if (!avatarImage) {
-      return res.status(400).json({ msg: "Avatar image is required", status: false });
+      return res
+        .status(400)
+        .json({ msg: "Avatar image is required", status: false });
     }
-    const userData = await User.findByIdAndUpdate(userId, {
-      isAvatarImageSet: true,
-      avatarImage,
-    }, {
-      new: true
-    });
+    const userData = await User.findByIdAndUpdate(
+      userId,
+      {
+        isAvatarImageSet: true,
+        avatarImage,
+      },
+      {
+        new: true,
+      }
+    );
     if (!userData) {
       return res.status(404).json({ msg: "User not found", status: false });
     }
@@ -82,6 +88,24 @@ export const setAvatar = async (
       isSet: userData.isAvatarImageSet,
       image: userData.avatarImage,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const users = await User.find({ _id: { $ne: req.params.id } }).select([
+      "email",
+      "username",
+      "avatarImage",
+      "_id",
+    ]);
+    return res.json(users);
   } catch (error) {
     next(error);
   }
