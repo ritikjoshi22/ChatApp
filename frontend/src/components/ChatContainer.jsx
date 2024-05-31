@@ -1,35 +1,40 @@
 import React from "react";
 import styled from "styled-components";
 import { Logout } from "./Logout";
+import { ChatInput } from "./ChatInput";
+import { Messages } from "./Messages";
 
 export const ChatContainer = ({ currentChat }) => {
-  return (<>
-      {
-          currentChat && (
-        < Container >
-      <div className="chat-header">
-        <div className="user-details">
-          <div className="avatar">
-            <img
-              src={`data:image/svg+xml;base64,${currentChat.avatarImage}`}
-              alt="avatar"
-            />
+    const handleSendMsg = async (msg) => {
+        alert(msg);
+  };
+  return (
+    <>
+      {currentChat && (
+        <Container>
+          <div className="chat-header">
+            <div className="user-details">
+              <div className="avatar">
+                <img
+                  src={`data:image/svg+xml;base64,${currentChat.avatarImage}`}
+                  alt="avatar"
+                />
+              </div>
+              <div className="username">
+                <h3>{currentChat.username}</h3>
+              </div>
+            </div>
+            <Logout />
           </div>
-          <div className="username">
-            <h3>{currentChat.username}</h3>
-          </div>
-                      </div>
-                      <Logout />
-          </div>
-          <div className="chat-messages"></div>
-          <div className="chat-input"></div>
-            </Container >
-          )
-}
-</>);
+          <Messages />
+          <ChatInput handleSendMsg={handleSendMsg} />
+        </Container>
+      )}
+    </>
+  );
 };
 const Container = styled.div`
-    display: grid;
+  display: grid;
   grid-template-rows: 10% 80% 10%;
   gap: 0.1rem;
   overflow: hidden;
@@ -52,7 +57,7 @@ const Container = styled.div`
       }
       .username {
         h3 {
-          color: black;
+          color: white;
         }
       }
     }
